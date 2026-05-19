@@ -16,7 +16,6 @@ obj/
 *.apk
 *.aab
 *.plist
-*.json
 
 # Ignore credentials and local configuration
 .env

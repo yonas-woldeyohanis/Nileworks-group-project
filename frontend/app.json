@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "NileWorks",
+    "slug": "nileworks",
+    "version": "1.0.0",
+    "sdkVersion": "54.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "backgroundColor": "#1B3A6B",
+      "resizeMode": "contain"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.hunarly.app"
+    },
+    "android": {
+      "package": "com.hunarly.app",
+      "adaptiveIcon": {
+        "backgroundColor": "#1B3A6B"
+      }
+    },
+    "plugins": [
+      "expo-font",
+      "expo-secure-store",
+      "expo-notifications"
+    ]
+  }
+}
