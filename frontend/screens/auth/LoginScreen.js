@@ -43,7 +43,10 @@ const LoginScreen = ({ navigation }) => {
       await login(email.toLowerCase().trim(), password);
       // Navigation handled by RootNavigator based on auth state
     } catch (err) {
-      const message = err.response?.data?.message || 'Login failed. Please try again.';
+      let message = err.response?.data?.message || 'Login failed. Please try again.';
+      if (err.message === 'Network Error') {
+        message = 'Please turn on data or connect to Wi-Fi to continue.';
+      }
       Alert.alert('Login Failed', message);
     } finally {
       setLoading(false);

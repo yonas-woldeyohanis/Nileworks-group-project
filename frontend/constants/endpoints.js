@@ -1,6 +1,6 @@
-// Replace with your actual backend URL when deploying
-// For local development use your machine's LAN IP e.g. http://192.168.x.x:5000
-export const BASE_URL = 'http://10.244.68.139:5000/api/v1';
+// Production backend deployed on Render
+// For local development, replace with your machine's LAN IP e.g. http://192.168.x.x:5000/api/v1
+export const BASE_URL = 'https://nileworks-backend.onrender.com/api/v1';
 
 export const ENDPOINTS = {
   // Auth
@@ -40,7 +40,7 @@ export const ENDPOINTS = {
     FEATURED: '/jobs/featured',
     SEARCH: '/jobs/search',
     SAVE: (id) => `/jobs/${id}/save`,
-    UNSAVE: (id) => `/jobs/${id}/unsave`,
+    UNSAVE: (id) => `/jobs/${id}/save`,
     SAVED: '/jobs/saved',
     MY_LISTINGS: '/jobs/my-listings',
     CREATE: '/jobs',

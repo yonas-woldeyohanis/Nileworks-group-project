@@ -201,7 +201,7 @@ const ApplicationTrackerScreen = ({ navigation }) => {
             <ApplicationCard
               key={app._id}
               application={app}
-              onPress={() => navigation.navigate('JobDetail', { jobId: app.job?._id })}
+              onPress={() => navigation.navigate('JobDetail', { jobId: app.job?._id, isApplied: true })}
             />
           ))
         )}

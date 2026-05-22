@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { useFocusEffect } from '@react-navigation/native';
 import {
   View,
   Text,
@@ -91,6 +92,12 @@ const HomeScreen = ({ navigation }) => {
       setRefreshing(false);
     }
   }, [selectedCategory]);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchJobs(selectedCategory, 1, false);
+    }, [selectedCategory])
+  );
 
   useEffect(() => {
     setLoading(true);
@@ -265,12 +272,14 @@ const HomeScreen = ({ navigation }) => {
         data={loading ? [] : jobs}
         keyExtractor={(item) => item._id}
         renderItem={({ item, index }) => (
-          <JobCard
-            job={item}
-            index={index}
-            onPress={(job) => navigation.navigate('JobDetail', { jobId: job._id })}
-            onSave={handleSave}
-          />
+          <View style={{ paddingHorizontal: SPACING.base }}>
+            <JobCard
+              job={item}
+              index={index}
+              onPress={(job) => navigation.navigate('JobDetail', { jobId: job._id })}
+              onSave={handleSave}
+            />
+          </View>
         )}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={
@@ -279,11 +288,13 @@ const HomeScreen = ({ navigation }) => {
               {[1, 2, 3, 4].map((i) => <JobCardSkeleton key={i} />)}
             </View>
           ) : (
-            <EmptyState
-              icon="briefcase-outline"
-              title="No jobs found"
-              message="Try a different category or check back later."
-            />
+            <View style={{ paddingHorizontal: SPACING.base }}>
+              <EmptyState
+                icon="briefcase-outline"
+                title="No jobs found"
+                message="Try a different category or check back later."
+              />
+            </View>
           )
         }
         ListFooterComponent={
@@ -506,8 +517,8 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.xs,
     color: COLORS.primary,
   },
-  listContent: { paddingHorizontal: SPACING.base, paddingBottom: 90 },
-  skeletons: { paddingHorizontal: 0 },
+  listContent: { paddingBottom: 90 },
+  skeletons: { paddingHorizontal: SPACING.base },
   loadMore: {
     alignItems: 'center',
     paddingVertical: SPACING.base,

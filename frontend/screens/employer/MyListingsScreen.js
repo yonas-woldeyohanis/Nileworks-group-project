@@ -2,16 +2,18 @@ import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, RefreshControl, TouchableOpacity, Text } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Header from '../../components/common/Header';
+import Badge from '../../components/common/Badge';
 import EmptyState from '../../components/common/EmptyState';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
 import { COLORS, SHADOWS } from '../../constants/colors';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
-import { getDeadlineStatus } from '../../utils/helpers';
+import { getDeadlineStatus, getJobTypeBadge } from '../../utils/helpers';
 
 const JobListingRow = ({ job, onPress, onToggle }) => {
   const deadline = getDeadlineStatus(job.deadline);
+  const typeBadge = getJobTypeBadge(job.jobType);
   return (
     <TouchableOpacity style={[styles.jobRow, SHADOWS.sm]} onPress={onPress} activeOpacity={0.85}>
       <View style={styles.jobRowLeft}>
@@ -20,6 +22,15 @@ const JobListingRow = ({ job, onPress, onToggle }) => {
           <Text style={[styles.deadlineText, { color: deadline.color }]}>{deadline.label}</Text>
           <View style={styles.metaDot} />
           <Text style={styles.applicantsText}>{job.applicantsCount || 0} applicants</Text>
+        </View>
+        <View style={{ flexDirection: 'row', marginTop: 6, gap: 6, alignItems: 'center' }}>
+          <Badge label={typeBadge.label} bg={typeBadge.bg} color={typeBadge.text} size="sm" />
+          {job.location && (
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Ionicons name="location-outline" size={12} color={COLORS.textMuted} style={{ marginRight: 2 }} />
+              <Text style={{ fontFamily: FONTS.regular, fontSize: 10, color: COLORS.textMuted }}>{job.location}</Text>
+            </View>
+          )}
         </View>
       </View>
       <View style={styles.jobRowRight}>

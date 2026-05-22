@@ -24,7 +24,7 @@ import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { getJobTypeBadge, getDeadlineStatus, formatDate } from '../../utils/helpers';
 
 const JobDetailScreen = ({ route, navigation }) => {
-  const { jobId } = route.params;
+  const { jobId, isApplied } = route.params;
   const insets = useSafeAreaInsets();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -190,10 +190,11 @@ const JobDetailScreen = ({ route, navigation }) => {
       {/* Sticky Apply button */}
       <View style={[styles.applyBar, { paddingBottom: insets.bottom + 12 }]}>
         <Button
-          title="Apply Now"
+          title={isApplied ? "Already Applied" : "Apply Now"}
           onPress={() => navigation.navigate('Apply', { job })}
-          icon={<Ionicons name="send-outline" size={16} color="#fff" />}
+          icon={<Ionicons name={isApplied ? "checkmark-circle" : "send-outline"} size={16} color="#fff" />}
           iconPosition="right"
+          disabled={isApplied}
         />
       </View>
     </View>
