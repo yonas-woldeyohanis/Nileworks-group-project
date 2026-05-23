@@ -49,7 +49,7 @@ exports.registerStudent = asyncHandler(async (req, res) => {
   if (exists) return res.status(409).json({ success: false, message: 'Email already registered' });
 
   const student = await Student.create({ fullName, email, password, university, department, yearOfStudy });
-  try { await sendWelcomeEmail(email, fullName); } catch (_) {}
+  sendWelcomeEmail(email, fullName).catch(() => {});
 
   await sendTokens(student, res, 201);
 });
@@ -65,7 +65,7 @@ exports.registerEmployer = asyncHandler(async (req, res) => {
   if (exists) return res.status(409).json({ success: false, message: 'Email already registered' });
 
   const employer = await Employer.create({ companyName, contactPersonName, email, password, industry, companySize, website });
-  try { await sendWelcomeEmail(email, companyName); } catch (_) {}
+  sendWelcomeEmail(email, companyName).catch(() => {});
 
   await sendTokens(employer, res, 201);
 });
