@@ -11,6 +11,7 @@ import JobDetailScreen from '../screens/student/JobDetailScreen';
 import ApplyScreen from '../screens/student/ApplyScreen';
 import ApplicationTrackerScreen from '../screens/student/ApplicationTrackerScreen';
 import StudentProfileScreen from '../screens/student/StudentProfileScreen';
+import SavedJobsScreen from '../screens/student/SavedJobsScreen';
 import MessagingScreen from '../screens/shared/MessagingScreen';
 import ConversationScreen from '../screens/shared/ConversationScreen';
 import NotificationsScreen from '../screens/shared/NotificationsScreen';
@@ -38,6 +39,12 @@ const HomeStack = () => (
 const TrackerStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="ApplicationTracker" component={ApplicationTrackerScreen} />
+  </Stack.Navigator>
+);
+
+const SavedStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="SavedJobs" component={SavedJobsScreen} />
   </Stack.Navigator>
 );
 
@@ -100,6 +107,16 @@ const StudentTabNavigator = () => {
           tabBarLabel: 'Tracker',
           tabBarIcon: ({ focused }) => (
             <TabIcon name={focused ? 'bar-chart' : 'bar-chart-outline'} focused={focused} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="SavedTab"
+        component={SavedStack}
+        options={{
+          tabBarLabel: 'Saved',
+          tabBarIcon: ({ focused }) => (
+            <TabIcon name={focused ? 'bookmark' : 'bookmark-outline'} focused={focused} />
           ),
         }}
       />
