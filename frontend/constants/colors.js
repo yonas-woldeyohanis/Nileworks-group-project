@@ -1,10 +1,12 @@
-export const COLORS = {
+export const lightColors = {
   primary: '#1B3A6B',
+  primaryText: '#1B3A6B',
   primaryLight: '#2A5298',
   primaryDark: '#102347',
   accent: '#F5A623',
   accentLight: '#FFB84D',
   accentDark: '#D4891A',
+  accentAlt: '#0D9488', // Vibrant Teal
   background: '#F8F9FA',
   surface: '#FFFFFF',
   surfaceElevated: '#FFFFFF',
@@ -44,10 +46,12 @@ export const COLORS = {
   skeletonHighlight: '#F8FAFC',
 
   // Gradients (as arrays for LinearGradient)
-  gradientPrimary: ['#1B3A6B', '#2A5298'],
+  gradientPrimary: ['#1A365D', '#2B6CB0'], // Richer royal blue
   gradientAccent: ['#F5A623', '#FFB84D'],
+  gradientTeal: ['#0F766E', '#14B8A6'],
+  gradientPurple: ['#6B21A8', '#9333EA'],
   gradientCard: ['#FFFFFF', '#F8F9FA'],
-  gradientHero: ['#071220', '#0D1B2A', '#1B3A6B'],
+  gradientHero: ['#071220', '#1A365D', '#2B6CB0'], // More vibrant hero
 };
 
 export const SHADOWS = {
@@ -80,3 +84,65 @@ export const SHADOWS = {
     elevation: 3,
   },
 };
+
+export const darkColors = {
+  primary: '#1B3A6B',
+  primaryText: '#60A5FA',
+  primaryLight: '#2A5298',
+  primaryDark: '#102347',
+  accent: '#F5A623',
+  accentLight: '#FFB84D',
+  accentDark: '#D4891A',
+  accentAlt: '#06B6D4', // Vibrant Cyan for Dark Mode
+  
+  // Backgrounds & Surfaces
+  background: '#0B1120',
+  surface: '#111827',
+  surfaceElevated: '#1F2937',
+  
+  // States
+  error: '#EF4444',
+  errorLight: 'rgba(239, 68, 68, 0.1)',
+  success: '#10B981',
+  successLight: 'rgba(16, 185, 129, 0.1)',
+  warning: '#F59E0B',
+  warningLight: 'rgba(245, 158, 11, 0.1)',
+  info: '#3B82F6',
+  infoLight: 'rgba(59, 130, 246, 0.1)',
+
+  // Text
+  textPrimary: '#F9FAFB',
+  textSecondary: '#D1D5DB',
+  textMuted: '#9CA3AF',
+  textInverse: '#0B1120',
+
+  // Borders & Dividers
+  border: '#374151',
+  borderLight: '#1F2937',
+  divider: '#374151',
+
+  // Status colors for Kanban
+  statusApplied: '#3B82F6',
+  statusViewed: '#8B5CF6',
+  statusInterview: '#F59E0B',
+  statusOffer: '#10B981',
+  statusRejected: '#EF4444',
+
+  // Overlays
+  overlay: 'rgba(0, 0, 0, 0.7)',
+  overlayLight: 'rgba(0, 0, 0, 0.4)',
+
+  // Skeleton
+  skeletonBase: '#1F2937',
+  skeletonHighlight: '#374151',
+
+  // Gradients
+  gradientPrimary: ['#1E3A8A', '#3B82F6'], // Brighter blue for dark mode
+  gradientAccent: ['#F5A623', '#FBBF24'],
+  gradientTeal: ['#0D9488', '#2DD4BF'],
+  gradientPurple: ['#7E22CE', '#A855F7'],
+  gradientCard: ['#111827', '#1F2937'],
+  gradientHero: ['#04080F', '#1E3A8A', '#3B82F6'], // Lighter dark hero
+};
+
+export const COLORS = lightColors;

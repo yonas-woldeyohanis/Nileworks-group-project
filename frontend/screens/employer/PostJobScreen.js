@@ -15,20 +15,23 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 
 const JOB_TYPES = ['internship', 'part-time', 'full-time', 'remote'];
 const CITIES = ['Addis Ababa', 'Dire Dawa', 'Hawassa', 'Bahir Dar', 'Mekelle', 'Adama', 'Jimma', 'Remote'];
 
-const Chip = ({ label, active, onPress }) => (
+const Chip = ({ label, active, onPress, styles }) => (
   <Pressable onPress={onPress} style={[styles.chip, active && styles.chipActive]}>
     <Text style={[styles.chipText, active && styles.chipTextActive]}>{label}</Text>
   </Pressable>
 );
 
 const PostJobScreen = ({ navigation }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const [loading, setLoading] = useState(false);
   const [skillInput, setSkillInput] = useState('');
   const [form, setForm] = useState({
@@ -107,7 +110,7 @@ const PostJobScreen = ({ navigation }) => {
         <Text style={styles.label}>Job Type *</Text>
         <View style={styles.chipRow}>
           {JOB_TYPES.map(type => (
-            <Chip key={type} label={type.replace('-', ' ')} active={form.jobType === type} onPress={() => update('jobType', type)} />
+            <Chip key={type} label={type.replace('-', ' ')} active={form.jobType === type} onPress={() => update('jobType', type)} styles={styles} />
           ))}
         </View>
         {errors.jobType && <Text style={styles.error}>{errors.jobType}</Text>}
@@ -116,7 +119,7 @@ const PostJobScreen = ({ navigation }) => {
         <Text style={[styles.label, { marginTop: SPACING.lg }]}>Location *</Text>
         <View style={styles.chipRow}>
           {CITIES.map(city => (
-            <Chip key={city} label={city} active={form.location === city} onPress={() => update('location', city)} />
+            <Chip key={city} label={city} active={form.location === city} onPress={() => update('location', city)} styles={styles} />
           ))}
         </View>
         {errors.location && <Text style={styles.error}>{errors.location}</Text>}
@@ -159,7 +162,7 @@ const PostJobScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { padding: SPACING.base, paddingBottom: 48 },
   label: { fontFamily: FONTS.semiBold, fontSize: FONT_SIZES.sm, color: COLORS.textSecondary, marginBottom: 10, letterSpacing: 0.3 },
@@ -171,7 +174,7 @@ const styles = StyleSheet.create({
   error: { fontFamily: FONTS.regular, fontSize: FONT_SIZES.xs, color: COLORS.error, marginTop: 4, marginLeft: 4 },
   skillsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 8, marginBottom: 8 },
   skillChip: { flexDirection: 'row', alignItems: 'center', paddingHorizontal: 12, paddingVertical: 6, borderRadius: BORDER_RADIUS.full, backgroundColor: COLORS.primary + '12', borderWidth: 1, borderColor: COLORS.primary + '30' },
-  skillText: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.sm, color: COLORS.primary },
+  skillText: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.sm, color: COLORS.primaryText },
   skillInputRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
   addBtn: { width: 44, height: 44, borderRadius: 12, backgroundColor: COLORS.primary, justifyContent: 'center', alignItems: 'center' },
   toggleRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: SPACING.base, borderTopWidth: 1, borderTopColor: COLORS.border, marginTop: SPACING.base },

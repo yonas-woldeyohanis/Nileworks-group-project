@@ -4,12 +4,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import Badge from './Badge';
 import Avatar from './Avatar';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { BORDER_RADIUS, SPACING } from '../../constants/layout';
 import { getJobTypeBadge, getDeadlineStatus, truncateText } from '../../utils/helpers';
 
 const JobCard = ({ job, onPress, onSave, index = 0, compact = false }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const typeBadge = getJobTypeBadge(job.jobType);
   const deadline = getDeadlineStatus(job.deadline);
 
@@ -126,7 +129,7 @@ const JobCard = ({ job, onPress, onSave, index = 0, compact = false }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   wrapper: {
     marginBottom: SPACING.md,
   },

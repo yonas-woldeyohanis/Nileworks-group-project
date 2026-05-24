@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, StatusBar } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 
 const Header = ({
@@ -13,6 +13,9 @@ const Header = ({
   transparent = false,
   light = false, // light text (for dark backgrounds)
 }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+  
   const insets = useSafeAreaInsets();
   const textColor = light ? '#fff' : COLORS.textPrimary;
 
@@ -66,7 +69,7 @@ const Header = ({
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: {
     paddingBottom: 12,
     paddingHorizontal: 16,

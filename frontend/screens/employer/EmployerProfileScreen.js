@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Alert,
   Pressable,
+  Switch,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,12 +19,15 @@ import Avatar from '../../components/common/Avatar';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 
 const EmployerProfileScreen = ({ navigation }) => {
   const { user, updateUser, logout } = useAuth();
+  const { colors: COLORS, SHADOWS, isDarkMode, toggleTheme } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [form, setForm] = useState({
@@ -145,6 +149,16 @@ const EmployerProfileScreen = ({ navigation }) => {
 
         {/* Settings */}
         <View style={styles.section}>
+          <View style={styles.settingRow}>
+            <Ionicons name="moon-outline" size={20} color={COLORS.textSecondary} />
+            <Text style={styles.settingText}>Dark Mode</Text>
+            <Switch
+              value={isDarkMode}
+              onValueChange={toggleTheme}
+              trackColor={{ false: COLORS.border, true: COLORS.primary }}
+              thumbColor="#fff"
+            />
+          </View>
           <TouchableOpacity style={styles.settingRow} onPress={() => navigation.navigate('ChangePassword')}>
             <Ionicons name="lock-closed-outline" size={20} color={COLORS.textSecondary} />
             <Text style={styles.settingText}>Change Password</Text>
@@ -168,7 +182,7 @@ const EmployerProfileScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   editBtn: { width: 36, height: 36, borderRadius: 18, backgroundColor: COLORS.primary + '12', justifyContent: 'center', alignItems: 'center' },
   content: { paddingBottom: 60 },
@@ -189,7 +203,7 @@ const styles = StyleSheet.create({
   emptyText: { fontFamily: FONTS.regular, fontSize: FONT_SIZES.sm, color: COLORS.textMuted },
   editActions: { flexDirection: 'row', marginHorizontal: SPACING.base, marginBottom: SPACING.base },
   settingRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: SPACING.sm },
-  settingText: { flex: 1, fontFamily: FONTS.medium, fontSize: FONT_SIZES.base },
+  settingText: { flex: 1, fontFamily: FONTS.medium, fontSize: FONT_SIZES.base, color: COLORS.textPrimary },
 });
 
 export default EmployerProfileScreen;

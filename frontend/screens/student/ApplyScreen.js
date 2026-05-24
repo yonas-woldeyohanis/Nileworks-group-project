@@ -19,13 +19,16 @@ import Avatar from '../../components/common/Avatar';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 
 const ApplyScreen = ({ route, navigation }) => {
   const { job } = route.params;
   const { user } = useAuth();
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const insets = useSafeAreaInsets();
   const [step, setStep] = useState(1); // 1: review, 2: cover letter, 3: confirm, 4: success
   const [coverLetter, setCoverLetter] = useState('');
@@ -296,11 +299,11 @@ const ApplyScreen = ({ route, navigation }) => {
             </Text>
 
             <View style={[styles.confirmCard, SHADOWS.sm]}>
-              <Row label="Applying for" value={job.title} />
-              <Row label="Company" value={job.employer?.companyName} />
-              <Row label="Your Name" value={user?.fullName} />
-              <Row label="Cover Letter" value={coverLetter ? `${coverLetter.length} characters` : 'None'} />
-              <Row label="CV" value={customCV ? customCV.name : (user?.cv ? 'Profile CV' : 'None')} />
+              <Row label="Applying for" value={job.title} styles={styles} />
+              <Row label="Company" value={job.employer?.companyName} styles={styles} />
+              <Row label="Your Name" value={user?.fullName} styles={styles} />
+              <Row label="Cover Letter" value={coverLetter ? `${coverLetter.length} characters` : 'None'} styles={styles} />
+              <Row label="CV" value={customCV ? customCV.name : (user?.cv ? 'Profile CV' : 'None')} styles={styles} />
             </View>
 
             <Button
@@ -318,14 +321,14 @@ const ApplyScreen = ({ route, navigation }) => {
   );
 };
 
-const Row = ({ label, value }) => (
+const Row = ({ label, value, styles }) => (
   <View style={styles.confirmRow}>
     <Text style={styles.confirmLabel}>{label}</Text>
     <Text style={styles.confirmValue}>{value || '—'}</Text>
   </View>
 );
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   progressRow: {
     flexDirection: 'row',

@@ -18,13 +18,16 @@ import Avatar from '../../components/common/Avatar';
 import { JobCardSkeleton } from '../../components/common/SkeletonLoader';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { getJobTypeBadge, getDeadlineStatus, formatDate } from '../../utils/helpers';
 
 const JobDetailScreen = ({ route, navigation }) => {
   const { jobId, isApplied } = route.params;
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const insets = useSafeAreaInsets();
   const [job, setJob] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -201,7 +204,7 @@ const JobDetailScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   loadingHeader: { height: 220, backgroundColor: COLORS.primary },
   hero: {

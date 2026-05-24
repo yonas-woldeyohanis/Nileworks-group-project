@@ -17,8 +17,7 @@ import ConversationScreen from '../screens/shared/ConversationScreen';
 import NotificationsScreen from '../screens/shared/NotificationsScreen';
 import ChangePasswordScreen from '../screens/shared/ChangePasswordScreen';
 import NotificationSettingsScreen from '../screens/shared/NotificationSettingsScreen';
-
-import { COLORS, SHADOWS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../constants/typography';
 
 const Tab = createBottomTabNavigator();
@@ -42,11 +41,6 @@ const TrackerStack = () => (
   </Stack.Navigator>
 );
 
-const SavedStack = () => (
-  <Stack.Navigator screenOptions={{ headerShown: false }}>
-    <Stack.Screen name="SavedJobs" component={SavedJobsScreen} />
-  </Stack.Navigator>
-);
 
 const MessagesStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -58,6 +52,7 @@ const MessagesStack = () => (
 const ProfileStack = () => (
   <Stack.Navigator screenOptions={{ headerShown: false }}>
     <Stack.Screen name="Profile" component={StudentProfileScreen} />
+    <Stack.Screen name="SavedJobs" component={SavedJobsScreen} />
     <Stack.Screen name="ChangePassword" component={ChangePasswordScreen} />
     <Stack.Screen name="NotificationSettings" component={NotificationSettingsScreen} />
   </Stack.Navigator>
@@ -65,8 +60,8 @@ const ProfileStack = () => (
 
 // ─── Custom Tab Bar Icon ──────────────────────────────────────────────────────
 
-const TabIcon = ({ name, focused, color }) => (
-  <View style={[styles.tabIconWrapper, focused && styles.tabIconActive]}>
+const TabIcon = ({ name, focused, color, COLORS, styles }) => (
+  <View style={[styles.tabIconWrapper, focused && { backgroundColor: COLORS.primary + '12' }]}>
     <Ionicons name={name} size={22} color={focused ? COLORS.primary : COLORS.textMuted} />
   </View>
 );
@@ -75,6 +70,8 @@ const TabIcon = ({ name, focused, color }) => (
 
 const StudentTabNavigator = () => {
   const insets = useSafeAreaInsets();
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
 
   return (
     <Tab.Navigator
@@ -96,7 +93,7 @@ const StudentTabNavigator = () => {
         options={{
           tabBarLabel: 'Discover',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'compass' : 'compass-outline'} focused={focused} />
+            <TabIcon name={focused ? 'compass' : 'compass-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
@@ -106,27 +103,18 @@ const StudentTabNavigator = () => {
         options={{
           tabBarLabel: 'Tracker',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'bar-chart' : 'bar-chart-outline'} focused={focused} />
+            <TabIcon name={focused ? 'bar-chart' : 'bar-chart-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
-      <Tab.Screen
-        name="SavedTab"
-        component={SavedStack}
-        options={{
-          tabBarLabel: 'Saved',
-          tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'bookmark' : 'bookmark-outline'} focused={focused} />
-          ),
-        }}
-      />
+
       <Tab.Screen
         name="MessagesTab"
         component={MessagesStack}
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'chatbubbles' : 'chatbubbles-outline'} focused={focused} />
+            <TabIcon name={focused ? 'chatbubbles' : 'chatbubbles-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
@@ -136,7 +124,7 @@ const StudentTabNavigator = () => {
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'person' : 'person-outline'} focused={focused} />
+            <TabIcon name={focused ? 'person' : 'person-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
@@ -144,7 +132,7 @@ const StudentTabNavigator = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   tabBar: {
     backgroundColor: COLORS.surface,
     borderTopWidth: 1,
@@ -164,9 +152,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  tabIconActive: {
-    backgroundColor: COLORS.primary + '12',
   },
 });
 

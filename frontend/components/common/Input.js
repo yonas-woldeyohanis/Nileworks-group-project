@@ -8,7 +8,7 @@ import {
   Animated,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { BORDER_RADIUS, LAYOUT } from '../../constants/layout';
 
@@ -33,6 +33,9 @@ const Input = ({
   onSubmitEditing,
   autoComplete,
 }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS), [COLORS]);
+
   const [isFocused, setIsFocused] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const labelAnim = useRef(new Animated.Value(value ? 1 : 0)).current;
@@ -162,7 +165,7 @@ const Input = ({
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS) => StyleSheet.create({
   wrapper: { marginBottom: 20 },
   container: {
     height: LAYOUT.inputHeight,

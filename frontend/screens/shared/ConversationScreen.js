@@ -18,12 +18,12 @@ import Avatar from '../../components/common/Avatar';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { ENDPOINTS, BASE_URL } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { formatDate } from '../../utils/helpers';
 
-const MessageBubble = ({ message, isOwn }) => (
+const MessageBubble = ({ message, isOwn, styles, COLORS }) => (
   <View style={[styles.bubbleRow, isOwn && styles.bubbleRowOwn]}>
     <View style={[styles.bubble, isOwn ? styles.bubbleOwn : styles.bubbleOther]}>
       <Text style={[styles.bubbleText, isOwn && styles.bubbleTextOwn]}>{message.content}</Text>
@@ -37,6 +37,9 @@ const MessageBubble = ({ message, isOwn }) => (
 const ConversationScreen = ({ route, navigation }) => {
   const { conversationId } = route.params;
   const { user } = useAuth();
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const insets = useSafeAreaInsets();
   const [messages, setMessages] = useState([]);
   const [inputText, setInputText] = useState('');
@@ -144,6 +147,8 @@ const ConversationScreen = ({ route, navigation }) => {
           <MessageBubble
             message={item}
             isOwn={item.sender?._id === user._id || item.sender === user._id}
+            styles={styles}
+            COLORS={COLORS}
           />
         )}
         contentContainerStyle={styles.messageList}
@@ -178,7 +183,7 @@ const ConversationScreen = ({ route, navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   messageList: { padding: SPACING.base, paddingBottom: 20 },
   bubbleRow: { marginBottom: SPACING.sm, alignItems: 'flex-start' },

@@ -4,7 +4,7 @@ import { BASE_URL, ENDPOINTS } from '../constants/endpoints';
 
 const api = axios.create({
   baseURL: BASE_URL,
-  timeout: 15000,
+  timeout: 60000,
   headers: {
     'Content-Type': 'application/json',
     Accept: 'application/json',

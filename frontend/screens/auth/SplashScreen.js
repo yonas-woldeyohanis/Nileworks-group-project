@@ -3,12 +3,15 @@ import { View, Text, StyleSheet, Dimensions, Animated, Easing } from 'react-nati
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { Ionicons } from '@expo/vector-icons';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 
 const { width, height } = Dimensions.get('window');
 
 const SplashScreen = ({ onFinish }) => {
+  const { colors: COLORS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS), [COLORS]);
+
   const logoScale = React.useRef(new Animated.Value(0.3)).current;
   const logoOpacity = React.useRef(new Animated.Value(0)).current;
   const taglineOpacity = React.useRef(new Animated.Value(0)).current;
@@ -16,6 +19,7 @@ const SplashScreen = ({ onFinish }) => {
   const circleScale = React.useRef(new Animated.Value(0)).current;
   const wave1X = React.useRef(new Animated.Value(-width)).current;
   const wave2X = React.useRef(new Animated.Value(-width)).current;
+  const floatY = React.useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     // Background circles
@@ -29,6 +33,14 @@ const SplashScreen = ({ onFinish }) => {
       Animated.sequence([
         Animated.timing(wave2X, { toValue: 0, duration: 2200, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
         Animated.timing(wave2X, { toValue: -width * 0.1, duration: 2200, useNativeDriver: true }),
+      ])
+    ).start();
+
+    // Floating logo animation
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatY, { toValue: -8, duration: 1500, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
+        Animated.timing(floatY, { toValue: 0, duration: 1500, easing: Easing.inOut(Easing.sin), useNativeDriver: true }),
       ])
     ).start();
 
@@ -50,16 +62,16 @@ const SplashScreen = ({ onFinish }) => {
       ])
     ]).start();
 
-    // Finish after 2.6s
+    // Finish after 4.0s
     const timer = setTimeout(() => {
       onFinish?.();
-    }, 2600);
+    }, 3000);
     return () => clearTimeout(timer);
   }, []);
 
   const logoStyle = {
     opacity: logoOpacity,
-    transform: [{ scale: logoScale }],
+    transform: [{ scale: logoScale }, { translateY: floatY }],
   };
 
   const taglineStyle = {
@@ -83,9 +95,9 @@ const SplashScreen = ({ onFinish }) => {
       {/* Logo area */}
       <Animated.View style={[styles.logoContainer, logoStyle]}>
         {/* N Water Drop Mark */}
-        <View style={styles.letterMark}>
-          <Ionicons name="water" size={38} color="#fff" />
-          <View style={styles.accentDot} />
+        <View style={[styles.letterMark, { backgroundColor: COLORS.accent }]}>
+          <Ionicons name="water" size={44} color="#fff" />
+          <View style={[styles.accentDot, { borderColor: COLORS.accent }]} />
         </View>
         <Text style={styles.wordmark}>NileWorks</Text>
       </Animated.View>
@@ -93,7 +105,6 @@ const SplashScreen = ({ onFinish }) => {
       {/* Tagline */}
       <Animated.View style={[styles.taglineContainer, taglineStyle]}>
         <Text style={styles.tagline}>Flow into your career.</Text>
-        <Text style={styles.taglineSub}>Built for Ethiopian students.</Text>
       </Animated.View>
 
       {/* Bottom wave decoration */}
@@ -105,7 +116,7 @@ const SplashScreen = ({ onFinish }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS) => StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
@@ -145,30 +156,29 @@ const styles = StyleSheet.create({
     marginBottom: 28,
   },
   letterMark: {
-    width: 88,
-    height: 88,
-    borderRadius: 28,
-    backgroundColor: COLORS.accent,
+    width: 96,
+    height: 96,
+    borderRadius: 32,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 18,
+    marginBottom: 20,
     position: 'relative',
-    shadowColor: COLORS.accent,
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.45,
-    shadowRadius: 20,
-    elevation: 12,
+    shadowColor: COLORS.primary,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.5,
+    shadowRadius: 25,
+    elevation: 15,
   },
   accentDot: {
     position: 'absolute',
-    bottom: 12,
-    right: 12,
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: COLORS.primary,
+    bottom: 14,
+    right: 14,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
+    backgroundColor: '#fff',
     borderWidth: 2,
-    borderColor: '#fff',
+    borderColor: COLORS.primary,
   },
   wordmark: {
     fontFamily: FONTS.displayBold,
@@ -184,14 +194,6 @@ const styles = StyleSheet.create({
     fontSize: FONT_SIZES.lg,
     color: 'rgba(255,255,255,0.9)',
     textAlign: 'center',
-    letterSpacing: 0.3,
-  },
-  taglineSub: {
-    fontFamily: FONTS.regular,
-    fontSize: FONT_SIZES.sm,
-    color: COLORS.accent,
-    textAlign: 'center',
-    marginTop: 8,
     letterSpacing: 0.5,
   },
   waveContainer: {

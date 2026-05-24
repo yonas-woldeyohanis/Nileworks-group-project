@@ -8,6 +8,7 @@ import {
   Alert,
   Pressable,
   Animated,
+  Switch,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as DocumentPicker from 'expo-document-picker';
@@ -20,7 +21,7 @@ import Avatar from '../../components/common/Avatar';
 import { useAuth } from '../../context/AuthContext';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { calculateProfileCompleteness } from '../../utils/helpers';
@@ -33,6 +34,9 @@ const SKILL_SUGGESTIONS = [
 
 const StudentProfileScreen = ({ navigation }) => {
   const { user, updateUser, logout } = useAuth();
+  const { colors: COLORS, isDarkMode, toggleTheme, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+  
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
   const [skillInput, setSkillInput] = useState('');
@@ -329,6 +333,21 @@ const StudentProfileScreen = ({ navigation }) => {
 
         {/* Settings */}
         <View style={styles.section}>
+          <TouchableOpacity style={styles.settingRow} onPress={() => navigation.navigate('SavedJobs')}>
+            <Ionicons name="bookmark-outline" size={20} color={COLORS.textSecondary} />
+            <Text style={styles.settingText}>Saved Posts</Text>
+            <Ionicons name="chevron-forward" size={16} color={COLORS.textMuted} />
+          </TouchableOpacity>
+          <View style={styles.settingRow}>
+            <Ionicons name="moon-outline" size={20} color={COLORS.textSecondary} />
+            <Text style={styles.settingText}>Dark Mode</Text>
+            <Switch 
+              value={isDarkMode}
+              onValueChange={toggleTheme}
+              trackColor={{ false: COLORS.borderLight, true: COLORS.primary }}
+              thumbColor={'#fff'}
+            />
+          </View>
           <TouchableOpacity style={styles.settingRow} onPress={() => navigation.navigate('ChangePassword')}>
             <Ionicons name="lock-closed-outline" size={20} color={COLORS.textSecondary} />
             <Text style={styles.settingText}>Change Password</Text>
@@ -355,7 +374,7 @@ const StudentProfileScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   editBtn: {
     width: 36,

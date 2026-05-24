@@ -15,8 +15,7 @@ import ConversationScreen from '../screens/shared/ConversationScreen';
 import NotificationsScreen from '../screens/shared/NotificationsScreen';
 import ChangePasswordScreen from '../screens/shared/ChangePasswordScreen';
 import NotificationSettingsScreen from '../screens/shared/NotificationSettingsScreen';
-
-import { COLORS, SHADOWS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../constants/typography';
 
 const Tab = createBottomTabNavigator();
@@ -60,14 +59,16 @@ const EmployerProfileStack = () => (
   </Stack.Navigator>
 );
 
-const TabIcon = ({ name, focused }) => (
-  <View style={[styles.tabIconWrapper, focused && styles.tabIconActive]}>
+const TabIcon = ({ name, focused, COLORS, styles }) => (
+  <View style={[styles.tabIconWrapper, focused && { backgroundColor: COLORS.primary + '12' }]}>
     <Ionicons name={name} size={22} color={focused ? COLORS.primary : COLORS.textMuted} />
   </View>
 );
 
 const EmployerTabNavigator = () => {
   const insets = useSafeAreaInsets();
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
 
   return (
     <Tab.Navigator
@@ -85,7 +86,7 @@ const EmployerTabNavigator = () => {
         options={{
           tabBarLabel: 'Dashboard',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'grid' : 'grid-outline'} focused={focused} />
+            <TabIcon name={focused ? 'grid' : 'grid-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
@@ -95,7 +96,7 @@ const EmployerTabNavigator = () => {
         options={{
           tabBarLabel: 'Post Job',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'add-circle' : 'add-circle-outline'} focused={focused} />
+            <TabIcon name={focused ? 'add-circle' : 'add-circle-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
@@ -105,7 +106,7 @@ const EmployerTabNavigator = () => {
         options={{
           tabBarLabel: 'Applicants',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'people' : 'people-outline'} focused={focused} />
+            <TabIcon name={focused ? 'people' : 'people-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
@@ -115,7 +116,7 @@ const EmployerTabNavigator = () => {
         options={{
           tabBarLabel: 'Messages',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'chatbubbles' : 'chatbubbles-outline'} focused={focused} />
+            <TabIcon name={focused ? 'chatbubbles' : 'chatbubbles-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
@@ -125,7 +126,7 @@ const EmployerTabNavigator = () => {
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'business' : 'business-outline'} focused={focused} />
+            <TabIcon name={focused ? 'business' : 'business-outline'} focused={focused} COLORS={COLORS} styles={styles} />
           ),
         }}
       />
@@ -133,7 +134,7 @@ const EmployerTabNavigator = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   tabBar: {
     backgroundColor: COLORS.surface,
     borderTopWidth: 1,
@@ -153,9 +154,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  tabIconActive: {
-    backgroundColor: COLORS.primary + '12',
   },
 });
 

@@ -5,10 +5,13 @@ import Input from '../../components/common/Input';
 import Button from '../../components/common/Button';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { SPACING } from '../../constants/layout';
 
 const ChangePasswordScreen = ({ navigation }) => {
+  const { colors: COLORS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS), [COLORS]);
+
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -91,7 +94,7 @@ const ChangePasswordScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,

@@ -1,7 +1,7 @@
 import React from 'react';
-import { TouchableOpacity, Text, ActivityIndicator, StyleSheet, View } from 'react-native';
+import { TouchableOpacity, Text, ActivityIndicator, StyleSheet, View, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { TYPOGRAPHY, FONTS } from '../../constants/typography';
 import { BORDER_RADIUS, LAYOUT } from '../../constants/layout';
 
@@ -18,9 +18,18 @@ const Button = ({
   style,
   textStyle,
 }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  
+  const scaleAnim = React.useRef(new Animated.Value(1)).current;
 
-  const handlePressIn = () => {};
-  const handlePressOut = () => {};
+  const handlePressIn = () => {
+    if (disabled || loading) return;
+    Animated.spring(scaleAnim, { toValue: 0.95, friction: 5, tension: 100, useNativeDriver: true }).start();
+  };
+  const handlePressOut = () => {
+    if (disabled || loading) return;
+    Animated.spring(scaleAnim, { toValue: 1, friction: 5, tension: 100, useNativeDriver: true }).start();
+  };
 
   const sizes = {
     sm: { height: 42, paddingHorizontal: 18, fontSize: 13, borderRadius: 14 },
@@ -109,23 +118,27 @@ const Button = ({
       ]}
     >
       {variantStyle.useGradient ? (
-        <LinearGradient
-          colors={isDisabled ? [COLORS.textMuted, COLORS.textMuted] : ['#1B3A6B', '#2A5298']}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 0 }}
-          style={[
-            styles.base,
-            { height: sizeStyle.height, paddingHorizontal: sizeStyle.paddingHorizontal, borderRadius: sizeStyle.borderRadius },
-            !isDisabled && SHADOWS.md,
-          ]}
-        >
-          {content}
-        </LinearGradient>
+        <Animated.View style={{ transform: [{ scale: scaleAnim }], width: '100%', alignItems: 'center' }}>
+          <LinearGradient
+            colors={isDisabled ? [COLORS.textMuted, COLORS.textMuted] : COLORS.gradientPrimary}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 0 }}
+            style={[
+              styles.base,
+              { width: fullWidth ? '100%' : 'auto', height: sizeStyle.height, paddingHorizontal: sizeStyle.paddingHorizontal, borderRadius: sizeStyle.borderRadius },
+              !isDisabled && SHADOWS.md,
+            ]}
+          >
+            {content}
+          </LinearGradient>
+        </Animated.View>
       ) : (
-        <View
+        <Animated.View
           style={[
             styles.base,
             {
+              transform: [{ scale: scaleAnim }],
+              width: fullWidth ? '100%' : 'auto',
               height: sizeStyle.height,
               paddingHorizontal: sizeStyle.paddingHorizontal,
               borderRadius: sizeStyle.borderRadius,
@@ -137,7 +150,7 @@ const Button = ({
           ]}
         >
           {content}
-        </View>
+        </Animated.View>
       )}
     </TouchableOpacity>
   );

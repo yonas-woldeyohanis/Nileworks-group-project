@@ -6,12 +6,12 @@ import Badge from '../../components/common/Badge';
 import EmptyState from '../../components/common/EmptyState';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { getDeadlineStatus, getJobTypeBadge } from '../../utils/helpers';
 
-const JobListingRow = ({ job, onPress, onToggle }) => {
+const JobListingRow = ({ job, onPress, onToggle, styles, COLORS, SHADOWS }) => {
   const deadline = getDeadlineStatus(job.deadline);
   const typeBadge = getJobTypeBadge(job.jobType);
   return (
@@ -48,6 +48,9 @@ const JobListingRow = ({ job, onPress, onToggle }) => {
 };
 
 const MyListingsScreen = ({ navigation }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -84,6 +87,9 @@ const MyListingsScreen = ({ navigation }) => {
             job={item}
             onPress={() => navigation.navigate('ApplicantDashboard', { jobId: item._id })}
             onToggle={handleToggleStatus}
+            styles={styles}
+            COLORS={COLORS}
+            SHADOWS={SHADOWS}
           />
         )}
         contentContainerStyle={styles.list}
@@ -102,7 +108,7 @@ const MyListingsScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   list: { padding: SPACING.base, paddingBottom: 80 },
   jobRow: {

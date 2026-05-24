@@ -19,6 +19,7 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Toast from 'react-native-toast-message';
 
 import { AuthProvider } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 import RootNavigator from './navigation/RootNavigator';
 
 // Keep the native splash visible while loading fonts
@@ -61,9 +62,11 @@ export default function App() {
     <GestureHandlerRootView style={styles.root}>
       <SafeAreaProvider>
         <View style={styles.root} onLayout={onLayoutRootView}>
-          <AuthProvider>
-            <RootNavigator />
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <RootNavigator />
+            </AuthProvider>
+          </ThemeProvider>
           <Toast />
         </View>
       </SafeAreaProvider>

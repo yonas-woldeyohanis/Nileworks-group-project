@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   Image,
+  Animated,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
@@ -15,7 +16,7 @@ import Avatar from '../../components/common/Avatar';
 import EmptyState from '../../components/common/EmptyState';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { getStatusConfig, formatRelativeDate } from '../../utils/helpers';
@@ -29,14 +30,28 @@ const STATUSES = [
   { id: 'rejected', label: 'Rejected', icon: 'close-circle-outline' },
 ];
 
-const ApplicationCard = ({ application, onPress, index }) => {
+const ApplicationCard = ({ application, onPress, index, styles, COLORS, SHADOWS }) => {
   const statusConfig = getStatusConfig(application.status);
+  
+  const scale = React.useRef(new Animated.Value(1)).current;
+  const opacity = React.useRef(new Animated.Value(0)).current;
+  const translateY = React.useRef(new Animated.Value(20)).current;
 
-  const handlePressIn = () => {};
-  const handlePressOut = () => {};
+  useEffect(() => {
+    Animated.sequence([
+      Animated.delay(index * 100),
+      Animated.parallel([
+        Animated.timing(opacity, { toValue: 1, duration: 300, useNativeDriver: true }),
+        Animated.spring(translateY, { toValue: 0, friction: 6, useNativeDriver: true })
+      ])
+    ]).start();
+  }, [index, opacity, translateY]);
+
+  const handlePressIn = () => Animated.spring(scale, { toValue: 0.97, friction: 5, useNativeDriver: true }).start();
+  const handlePressOut = () => Animated.spring(scale, { toValue: 1, friction: 5, useNativeDriver: true }).start();
 
   return (
-    <View>
+    <Animated.View style={{ transform: [{ scale }, { translateY }], opacity }}>
       <TouchableOpacity
         onPress={onPress}
         onPressIn={handlePressIn}
@@ -78,11 +93,14 @@ const ApplicationCard = ({ application, onPress, index }) => {
           )}
         </View>
       </TouchableOpacity>
-    </View>
+    </Animated.View>
   );
 };
 
 const ApplicationTrackerScreen = ({ navigation }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -144,7 +162,7 @@ const ApplicationTrackerScreen = ({ navigation }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.filterScroll}
-        contentContainerStyle={{ paddingHorizontal: SPACING.base, gap: 8 }}
+        contentContainerStyle={{ paddingHorizontal: SPACING.base, paddingVertical: SPACING.sm, gap: 8, alignItems: 'center' }}
       >
         <TouchableOpacity
           style={[styles.filterPill, selectedStatus === 'all' && styles.filterPillActive]}
@@ -201,7 +219,11 @@ const ApplicationTrackerScreen = ({ navigation }) => {
             <ApplicationCard
               key={app._id}
               application={app}
+              index={index}
               onPress={() => navigation.navigate('JobDetail', { jobId: app.job?._id, isApplied: true })}
+              styles={styles}
+              COLORS={COLORS}
+              SHADOWS={SHADOWS}
             />
           ))
         )}
@@ -210,7 +232,7 @@ const ApplicationTrackerScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   summaryRow: {
     flexDirection: 'row',
@@ -238,7 +260,9 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   filterScroll: {
-    paddingVertical: SPACING.sm,
+    flexGrow: 0,
+    flexShrink: 0,
+    minHeight: 64,
     borderBottomWidth: 1,
     borderBottomColor: COLORS.border,
   },

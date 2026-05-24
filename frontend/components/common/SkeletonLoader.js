@@ -1,13 +1,14 @@
 import React, { useEffect, useRef } from 'react';
 import { View, StyleSheet, Dimensions, Animated, Easing } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { COLORS } from '../../constants/colors';
 import { BORDER_RADIUS } from '../../constants/layout';
+import { useTheme } from '../../context/ThemeContext';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 // Single shimmer block
 export const SkeletonBlock = ({ width = '100%', height = 16, borderRadius = BORDER_RADIUS.md, style }) => {
+  const { colors: COLORS, isDarkMode } = useTheme();
   const translateX = useRef(new Animated.Value(-SCREEN_WIDTH)).current;
 
   useEffect(() => {
@@ -20,6 +21,8 @@ export const SkeletonBlock = ({ width = '100%', height = 16, borderRadius = BORD
       })
     ).start();
   }, [translateX]);
+
+  const highlightColor = isDarkMode ? 'rgba(255,255,255,0.05)' : 'rgba(255,255,255,0.5)';
 
   return (
     <View
@@ -38,7 +41,7 @@ export const SkeletonBlock = ({ width = '100%', height = 16, borderRadius = BORD
         <LinearGradient
           colors={[
             'transparent',
-            'rgba(255,255,255,0.5)',
+            highlightColor,
             'transparent',
           ]}
           start={{ x: 0, y: 0 }}
@@ -51,23 +54,27 @@ export const SkeletonBlock = ({ width = '100%', height = 16, borderRadius = BORD
 };
 
 // Job Card Skeleton
-export const JobCardSkeleton = () => (
-  <View style={styles.card}>
-    <View style={styles.cardHeader}>
-      <SkeletonBlock width={48} height={48} borderRadius={12} />
-      <View style={{ flex: 1, marginLeft: 12 }}>
-        <SkeletonBlock height={16} width="70%" style={{ marginBottom: 8 }} />
-        <SkeletonBlock height={12} width="45%" />
+export const JobCardSkeleton = () => {
+  const { colors: COLORS } = useTheme();
+  
+  return (
+    <View style={[styles.card, { backgroundColor: COLORS.surface }]}>
+      <View style={styles.cardHeader}>
+        <SkeletonBlock width={48} height={48} borderRadius={12} />
+        <View style={{ flex: 1, marginLeft: 12 }}>
+          <SkeletonBlock height={16} width="70%" style={{ marginBottom: 8 }} />
+          <SkeletonBlock height={12} width="45%" />
+        </View>
+      </View>
+      <SkeletonBlock height={12} width="90%" style={{ marginTop: 16, marginBottom: 8 }} />
+      <SkeletonBlock height={12} width="60%" />
+      <View style={styles.cardFooter}>
+        <SkeletonBlock height={24} width={80} borderRadius={BORDER_RADIUS.full} />
+        <SkeletonBlock height={24} width={80} borderRadius={BORDER_RADIUS.full} />
       </View>
     </View>
-    <SkeletonBlock height={12} width="90%" style={{ marginTop: 16, marginBottom: 8 }} />
-    <SkeletonBlock height={12} width="60%" />
-    <View style={styles.cardFooter}>
-      <SkeletonBlock height={24} width={80} borderRadius={BORDER_RADIUS.full} />
-      <SkeletonBlock height={24} width={80} borderRadius={BORDER_RADIUS.full} />
-    </View>
-  </View>
-);
+  );
+};
 
 // Profile Header Skeleton
 export const ProfileSkeleton = () => (
@@ -85,7 +92,6 @@ export const ProfileSkeleton = () => (
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: COLORS.surface,
     borderRadius: BORDER_RADIUS.lg,
     padding: 16,
     marginBottom: 12,

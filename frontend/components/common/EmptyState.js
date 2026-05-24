@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Button from './Button';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING } from '../../constants/layout';
 
@@ -12,8 +12,12 @@ const EmptyState = ({
   message = '',
   actionLabel,
   onAction,
-}) => (
-  <View style={styles.container}>
+}) => {
+  const { colors: COLORS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS), [COLORS]);
+
+  return (
+    <View style={styles.container}>
     <View style={styles.iconContainer}>
       <Ionicons name={icon} size={40} color={COLORS.primary} />
     </View>
@@ -28,9 +32,10 @@ const EmptyState = ({
       />
     )}
   </View>
-);
+  );
+};
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS) => StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',

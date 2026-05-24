@@ -8,24 +8,39 @@ import {
   KeyboardAvoidingView,
   Platform,
   Alert,
+  Animated,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
+import AnimatedGlowBorder from '../../components/common/AnimatedGlowBorder';
 import { useAuth } from '../../context/AuthContext';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { BORDER_RADIUS, SPACING } from '../../constants/layout';
 import { validateEmail } from '../../utils/helpers';
 
 const LoginScreen = ({ navigation }) => {
   const { login } = useAuth();
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const floatY = React.useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatY, { toValue: -6, duration: 1500, useNativeDriver: true }),
+        Animated.timing(floatY, { toValue: 0, duration: 1500, useNativeDriver: true }),
+      ])
+    ).start();
+  }, [floatY]);
 
   const validate = () => {
     const errs = {};
@@ -44,8 +59,8 @@ const LoginScreen = ({ navigation }) => {
       // Navigation handled by RootNavigator based on auth state
     } catch (err) {
       let message = err.response?.data?.message || 'Login failed. Please try again.';
-      if (err.message === 'Network Error') {
-        message = 'Please turn on data or connect to Wi-Fi to continue.';
+      if (err.message === 'Network Error' || err.message?.includes('timeout')) {
+        message = 'Server is waking up, this might take a moment. Please try again.';
       }
       Alert.alert('Login Failed', message);
     } finally {
@@ -68,9 +83,9 @@ const LoginScreen = ({ navigation }) => {
         >
           <Ionicons name="chevron-back" size={22} color="#fff" />
         </TouchableOpacity>
-        <View style={styles.logoMark}>
+        <Animated.View style={[styles.logoMark, { transform: [{ translateY: floatY }] }]}>
           <Ionicons name="water" size={28} color="#fff" />
-        </View>
+        </Animated.View>
         <Text style={styles.heroTitle}>Sign In</Text>
         <Text style={styles.heroSub}>Welcome back to NileWorks</Text>
       </LinearGradient>
@@ -137,7 +152,7 @@ const LoginScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   hero: {
     paddingTop: 60,
@@ -195,7 +210,7 @@ const styles = StyleSheet.create({
   forgotText: {
     fontFamily: FONTS.medium,
     fontSize: FONT_SIZES.sm,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
   divider: {
     flexDirection: 'row',
@@ -217,7 +232,7 @@ const styles = StyleSheet.create({
   },
   registerBold: {
     fontFamily: FONTS.bold,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
 });
 

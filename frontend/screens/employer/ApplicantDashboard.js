@@ -16,7 +16,7 @@ import EmptyState from '../../components/common/EmptyState';
 import Badge from '../../components/common/Badge';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { formatRelativeDate, getStatusConfig } from '../../utils/helpers';
@@ -43,7 +43,7 @@ const handleViewCV = async (cvUrl) => {
   }
 };
 
-const ApplicantCard = ({ application, onStatusChange, onMessage }) => {
+const ApplicantCard = ({ application, onStatusChange, onMessage, styles, COLORS, SHADOWS }) => {
   const student = application.student;
   const statusConfig = getStatusConfig(application.status);
   const [expanded, setExpanded] = useState(false);
@@ -145,10 +145,13 @@ const ApplicantCard = ({ application, onStatusChange, onMessage }) => {
 };
 
 const ApplicantDashboard = ({ route, navigation }) => {
-  const { jobId } = route.params || {};
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
+  const { jobId, initialFilter } = route.params || {};
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterStatus, setFilterStatus] = useState(initialFilter || 'all');
 
   useEffect(() => { fetchApplications(); }, [jobId]);
 
@@ -202,7 +205,7 @@ const ApplicantDashboard = ({ route, navigation }) => {
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.filterBar}
-        contentContainerStyle={{ paddingHorizontal: SPACING.base, gap: 8 }}
+        contentContainerStyle={{ paddingHorizontal: SPACING.base, paddingVertical: SPACING.sm, gap: 8, alignItems: 'center' }}
       >
         <TouchableOpacity
           style={[styles.filterPill, filterStatus === 'all' && styles.filterPillActive]}
@@ -238,6 +241,9 @@ const ApplicantDashboard = ({ route, navigation }) => {
             application={item}
             onStatusChange={handleStatusChange}
             onMessage={handleMessage}
+            styles={styles}
+            COLORS={COLORS}
+            SHADOWS={SHADOWS}
           />
         )}
         contentContainerStyle={styles.list}
@@ -258,9 +264,9 @@ const ApplicantDashboard = ({ route, navigation }) => {
 };
 
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
-  filterBar: { paddingVertical: SPACING.sm, borderBottomWidth: 1, borderBottomColor: COLORS.border },
+  filterBar: { flexGrow: 0, flexShrink: 0, minHeight: 64, borderBottomWidth: 1, borderBottomColor: COLORS.border },
   filterPill: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: BORDER_RADIUS.full, backgroundColor: COLORS.surface, borderWidth: 1.5, borderColor: COLORS.border },
   filterPillActive: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
   filterText: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.sm, color: COLORS.textSecondary },
@@ -286,17 +292,17 @@ const styles = StyleSheet.create({
   skillsSection: { marginBottom: SPACING.sm },
   skillsWrap: { flexDirection: 'row', flexWrap: 'wrap', gap: 6 },
   skillPill: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: BORDER_RADIUS.full, backgroundColor: COLORS.primary + '12' },
-  skillText: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.xs, color: COLORS.primary },
+  skillText: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.xs, color: COLORS.primaryText },
   coverSection: { marginBottom: SPACING.sm },
   coverText: { fontFamily: FONTS.regular, fontSize: FONT_SIZES.sm, color: COLORS.textSecondary, lineHeight: 20 },
   cvRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginBottom: SPACING.sm },
-  cvLink: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.sm, color: COLORS.primary },
+  cvLink: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.sm, color: COLORS.primaryText },
   appliedDate: { fontFamily: FONTS.regular, fontSize: FONT_SIZES.xs, color: COLORS.textMuted, marginBottom: SPACING.sm },
   actionsScroll: { marginBottom: SPACING.sm },
   actionBtn: { paddingHorizontal: 12, paddingVertical: 7, borderRadius: BORDER_RADIUS.full, borderWidth: 1.5, marginRight: 8 },
   actionBtnText: { fontFamily: FONTS.semiBold, fontSize: FONT_SIZES.xs },
   messageBtn: { flexDirection: 'row', alignItems: 'center', gap: 6, paddingVertical: 8, borderTopWidth: 1, borderTopColor: COLORS.borderLight, marginTop: 4 },
-  messageBtnText: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.sm, color: COLORS.primary },
+  messageBtnText: { fontFamily: FONTS.medium, fontSize: FONT_SIZES.sm, color: COLORS.primaryText },
 });
 
 export default ApplicantDashboard;

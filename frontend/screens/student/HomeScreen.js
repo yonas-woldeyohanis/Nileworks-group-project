@@ -22,7 +22,7 @@ import Avatar from '../../components/common/Avatar';
 import api from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 
@@ -37,14 +37,14 @@ const CATEGORIES = [
 ];
 
 // Wave bottom divider using pure React Native
-const NileWave = () => (
+const NileWave = ({ colors }) => (
   <View style={{
     position: 'absolute',
     bottom: 0,
     left: -width * 0.1,
     right: -width * 0.1,
     height: 48,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: colors.background,
     borderTopLeftRadius: width * 0.6,
     borderTopRightRadius: width * 0.5,
   }} />
@@ -52,6 +52,9 @@ const NileWave = () => (
 
 const HomeScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+  
   const insets = useSafeAreaInsets();
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -140,12 +143,16 @@ const HomeScreen = ({ navigation }) => {
 
   const firstName = user?.fullName?.split(' ')[0] || user?.contactPersonName?.split(' ')[0] || 'there';
 
-  const getGreeting = () => {
-    const hour = new Date().getHours();
-    if (hour < 12) return 'Good morning 🌊';
-    if (hour < 17) return 'Good afternoon ☀️';
-    return 'Good evening 🌙';
-  };
+  const [greeting, setGreeting] = useState('Good morning 🌊');
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const hour = new Date().getHours();
+      if (hour < 12) setGreeting('Good morning 🌊');
+      else if (hour < 17) setGreeting('Good afternoon ☀️');
+      else setGreeting('Good evening 🌙');
+    }, [])
+  );
 
   const renderHeader = () => (
     <View>
@@ -169,7 +176,7 @@ const HomeScreen = ({ navigation }) => {
         <View style={styles.greetingContent}>
           <View style={styles.greetingLeft}>
             <View style={styles.greetingTextRow}>
-              <Text style={styles.greetingSmall}>{getGreeting()}</Text>
+              <Text style={styles.greetingSmall}>{greeting}</Text>
             </View>
             <Text style={styles.greetingName}>Hello, {firstName}</Text>
             <View style={styles.brandRow}>
@@ -196,7 +203,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
 
         {/* Nile wave bottom */}
-        <NileWave />
+        <NileWave colors={COLORS} />
       </LinearGradient>
 
       {/* Search bar floating over wave */}
@@ -207,11 +214,11 @@ const HomeScreen = ({ navigation }) => {
           activeOpacity={0.85}
         >
           <View style={styles.searchIconBg}>
-            <Ionicons name="search-outline" size={16} color={COLORS.primary} />
+            <Ionicons name="search-outline" size={16} color={COLORS.primaryText} />
           </View>
           <Text style={styles.searchPlaceholder}>Search jobs, companies, skills…</Text>
           <View style={styles.filterBtn}>
-            <Ionicons name="options-outline" size={16} color={COLORS.primary} />
+            <Ionicons name="options-outline" size={16} color={COLORS.primaryText} />
           </View>
         </TouchableOpacity>
       </View>
@@ -322,7 +329,7 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   greetingBar: {
     paddingHorizontal: SPACING.base,
@@ -362,8 +369,9 @@ const styles = StyleSheet.create({
   },
   dropletAccent: {
     position: 'absolute',
-    top: 55,
-    right: 80,
+    top: 60,
+    left: '50%',
+    marginLeft: 20,
     width: 28,
     height: 28,
     borderRadius: 14,

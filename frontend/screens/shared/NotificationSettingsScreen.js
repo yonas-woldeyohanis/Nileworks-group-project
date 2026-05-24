@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { View, StyleSheet, Text, Switch, ScrollView } from 'react-native';
 import Header from '../../components/common/Header';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 
 const NotificationSettingsScreen = ({ navigation }) => {
+  const { colors: COLORS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS), [COLORS]);
+
   const [settings, setSettings] = useState({
     pushNotifications: true,
     emailNotifications: true,
@@ -60,7 +63,7 @@ const NotificationSettingsScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS) => StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: COLORS.background,

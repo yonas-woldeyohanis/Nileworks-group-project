@@ -13,7 +13,7 @@ import Header from '../../components/common/Header';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { useAuth } from '../../context/AuthContext';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { validateEmail, validatePassword } from '../../utils/helpers';
@@ -34,6 +34,9 @@ const YEARS = ['1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year', 'Grad
 
 const StudentRegisterScreen = ({ navigation }) => {
   const { registerStudent } = useAuth();
+  const { colors: COLORS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS), [COLORS]);
+
   const [step, setStep] = useState(1); // 2-step form
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -91,7 +94,10 @@ const StudentRegisterScreen = ({ navigation }) => {
         yearOfStudy: form.yearOfStudy,
       });
     } catch (err) {
-      const message = err.response?.data?.message || 'Registration failed. Please try again.';
+      let message = err.response?.data?.message || 'Registration failed. Please try again.';
+      if (err.message === 'Network Error' || err.message?.includes('timeout')) {
+        message = 'Server is waking up, this might take a moment. Please try again.';
+      }
       Alert.alert('Registration Failed', message);
     } finally {
       setLoading(false);
@@ -269,7 +275,7 @@ const StudentRegisterScreen = ({ navigation }) => {
 // Pressable import fix
 import { Pressable } from 'react-native';
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   stepBar: {
     flexDirection: 'row',

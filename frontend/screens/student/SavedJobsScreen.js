@@ -7,10 +7,13 @@ import { JobCardSkeleton } from '../../components/common/SkeletonLoader';
 import EmptyState from '../../components/common/EmptyState';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { SPACING } from '../../constants/layout';
 
 const SavedJobsScreen = ({ navigation }) => {
+  const { colors: COLORS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS), [COLORS]);
+  
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -97,7 +100,7 @@ const SavedJobsScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   listContent: { paddingBottom: 90, paddingTop: SPACING.sm },
   skeletons: { paddingHorizontal: SPACING.base },

@@ -12,12 +12,12 @@ import Avatar from '../../components/common/Avatar';
 import EmptyState from '../../components/common/EmptyState';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { formatRelativeDate, truncateText } from '../../utils/helpers';
 
-const ConversationItem = ({ conversation, onPress }) => {
+const ConversationItem = ({ conversation, onPress, styles, COLORS, SHADOWS }) => {
   const other = conversation.participants?.find((p) => p._id !== conversation.currentUserId);
   const unread = conversation.unreadCount > 0;
 
@@ -44,6 +44,9 @@ const ConversationItem = ({ conversation, onPress }) => {
 };
 
 const MessagingScreen = ({ navigation }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -72,6 +75,9 @@ const MessagingScreen = ({ navigation }) => {
           <ConversationItem
             conversation={item}
             onPress={() => navigation.navigate('Conversation', { conversationId: item._id, conversation: item })}
+            styles={styles}
+            COLORS={COLORS}
+            SHADOWS={SHADOWS}
           />
         )}
         contentContainerStyle={styles.list}
@@ -98,7 +104,7 @@ const MessagingScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   list: { padding: SPACING.base, paddingBottom: 90 },
   convoItem: {

@@ -12,7 +12,7 @@ import Header from '../../components/common/Header';
 import EmptyState from '../../components/common/EmptyState';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { formatRelativeDate } from '../../utils/helpers';
@@ -28,7 +28,7 @@ const NOTIF_ICONS = {
   job_match: { icon: 'briefcase-outline', color: '#1B3A6B', bg: '#EFF4FF' },
 };
 
-const NotificationItem = ({ notif, onPress }) => {
+const NotificationItem = ({ notif, onPress, styles, COLORS, SHADOWS }) => {
   const iconConfig = NOTIF_ICONS[notif.type] || { icon: 'notifications-outline', color: COLORS.primary, bg: COLORS.primary + '15' };
 
   return (
@@ -54,6 +54,9 @@ const NotificationItem = ({ notif, onPress }) => {
 
 const NotificationsScreen = ({ navigation }) => {
   const { user } = useAuth();
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const isEmployer = user?.role === 'employer';
   const [notifications, setNotifications] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -112,7 +115,6 @@ const NotificationsScreen = ({ navigation }) => {
             notif={item}
             onPress={() => {
               markRead(item._id);
-              // Navigate based on notif type — must target tab + nested screen
               if (item.type === 'message') {
                 const tab = isEmployer ? 'EmployerMessagesTab' : 'MessagesTab';
                 navigation.navigate(tab, { screen: 'Messages' });
@@ -124,6 +126,9 @@ const NotificationsScreen = ({ navigation }) => {
                 }
               }
             }}
+            styles={styles}
+            COLORS={COLORS}
+            SHADOWS={SHADOWS}
           />
         )}
         contentContainerStyle={styles.list}
@@ -150,7 +155,7 @@ const NotificationsScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   list: { padding: SPACING.base, paddingBottom: 90 },
   notifCard: {

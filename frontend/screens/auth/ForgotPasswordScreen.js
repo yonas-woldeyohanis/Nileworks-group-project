@@ -15,12 +15,15 @@ import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { validateEmail, validatePassword } from '../../utils/helpers';
 
 const ForgotPasswordScreen = ({ navigation }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const [step, setStep] = useState(1); // 1: email, 2: OTP, 3: new password
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -192,7 +195,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { padding: SPACING.base, paddingTop: SPACING.xl, paddingBottom: 48 },
   card: {

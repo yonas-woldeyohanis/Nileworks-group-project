@@ -14,7 +14,7 @@ import Header from '../../components/common/Header';
 import Button from '../../components/common/Button';
 import Input from '../../components/common/Input';
 import { useAuth } from '../../context/AuthContext';
-import { COLORS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 import { validateEmail, validatePassword } from '../../utils/helpers';
@@ -29,6 +29,9 @@ const COMPANY_SIZES = ['1-10', '11-50', '51-200', '201-500', '500+'];
 
 const EmployerRegisterScreen = ({ navigation }) => {
   const { registerEmployer } = useAuth();
+  const { colors: COLORS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS), [COLORS]);
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
@@ -77,7 +80,10 @@ const EmployerRegisterScreen = ({ navigation }) => {
         website: form.website.trim(),
       });
     } catch (err) {
-      const message = err.response?.data?.message || 'Registration failed. Please try again.';
+      let message = err.response?.data?.message || 'Registration failed. Please try again.';
+      if (err.message === 'Network Error' || err.message?.includes('timeout')) {
+        message = 'Server is waking up, this might take a moment. Please try again.';
+      }
       Alert.alert('Registration Failed', message);
     } finally {
       setLoading(false);
@@ -195,7 +201,7 @@ const EmployerRegisterScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   content: { padding: SPACING.base, paddingBottom: 48 },
   sectionTitle: {

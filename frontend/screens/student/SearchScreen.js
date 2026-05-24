@@ -18,7 +18,7 @@ import EmptyState from '../../components/common/EmptyState';
 import Button from '../../components/common/Button';
 import api from '../../services/api';
 import { ENDPOINTS } from '../../constants/endpoints';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { SPACING, BORDER_RADIUS } from '../../constants/layout';
 
@@ -30,7 +30,7 @@ const SORT_OPTIONS = [
   { id: 'deadline', label: 'Deadline Soon' },
 ];
 
-const FilterChip = ({ label, active, onPress }) => (
+const FilterChip = ({ label, active, onPress, styles }) => (
   <Pressable
     onPress={onPress}
     style={[styles.filterChip, active && styles.filterChipActive]}
@@ -40,6 +40,9 @@ const FilterChip = ({ label, active, onPress }) => (
 );
 
 const SearchScreen = ({ navigation }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+
   const insets = useSafeAreaInsets();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
@@ -182,6 +185,7 @@ const SearchScreen = ({ navigation }) => {
                   label={type.replace('-', ' ')}
                   active={filters.jobTypes.includes(type)}
                   onPress={() => toggleFilter('jobTypes', type)}
+                  styles={styles}
                 />
               ))}
             </View>
@@ -194,6 +198,7 @@ const SearchScreen = ({ navigation }) => {
                   label={city}
                   active={filters.locations.includes(city)}
                   onPress={() => toggleFilter('locations', city)}
+                  styles={styles}
                 />
               ))}
             </View>
@@ -206,6 +211,7 @@ const SearchScreen = ({ navigation }) => {
                   label={opt.label}
                   active={filters.sortBy === opt.id}
                   onPress={() => setFilters((f) => ({ ...f, sortBy: opt.id }))}
+                  styles={styles}
                 />
               ))}
             </View>
@@ -242,7 +248,7 @@ const SearchScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   searchRow: {
     flexDirection: 'row',

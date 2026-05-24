@@ -12,7 +12,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { StatusBar } from 'expo-status-bar';
 import Button from '../../components/common/Button';
-import { COLORS, SHADOWS } from '../../constants/colors';
+import { useTheme } from '../../context/ThemeContext';
 import { FONTS, FONT_SIZES } from '../../constants/typography';
 import { BORDER_RADIUS, SPACING } from '../../constants/layout';
 
@@ -25,7 +25,7 @@ const ROLES = [
     subtitle: 'Find internships, part-time & full-time jobs',
     icon: 'school-outline',
     accentIcon: 'briefcase-outline',
-    gradient: [COLORS.primary, COLORS.primaryLight],
+    gradientKey: 'gradientPrimary',
     features: ['Browse 100s of listings', 'Track applications', 'Get matched to jobs'],
   },
   {
@@ -34,17 +34,19 @@ const ROLES = [
     subtitle: 'Post jobs and find qualified Ethiopian talent',
     icon: 'business-outline',
     accentIcon: 'people-outline',
-    gradient: ['#1A1A2E', '#2D3561'],
+    gradientKey: 'gradientPurple',
     features: ['Post job listings', 'Review applicants', 'Manage pipeline'],
   },
 ];
 
-const RoleCard = ({ role, selected, onSelect, index }) => {
+const RoleCard = ({ role, selected, onSelect, index, styles, COLORS, SHADOWS }) => {
   const scale = React.useRef(new Animated.Value(1)).current;
   const translateY = React.useRef(new Animated.Value(40)).current;
   const opacity = React.useRef(new Animated.Value(0)).current;
+  const floatY = React.useRef(new Animated.Value(0)).current;
 
   React.useEffect(() => {
+    // Entrance animation
     Animated.sequence([
       Animated.delay(index * 150),
       Animated.parallel([
@@ -52,7 +54,15 @@ const RoleCard = ({ role, selected, onSelect, index }) => {
         Animated.timing(opacity, { toValue: 1, duration: 400, useNativeDriver: true })
       ])
     ]).start();
-  }, [index, translateY, opacity]);
+
+    // Continuous floating animation
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(floatY, { toValue: -6, duration: 1500, useNativeDriver: true }),
+        Animated.timing(floatY, { toValue: 0, duration: 1500, useNativeDriver: true }),
+      ])
+    ).start();
+  }, [index, translateY, opacity, floatY]);
 
   const animatedStyle = {
     transform: [{ translateY }, { scale }],
@@ -81,18 +91,20 @@ const RoleCard = ({ role, selected, onSelect, index }) => {
       >
         {selected && (
           <View style={styles.selectedCheck}>
-            <Ionicons name="checkmark-circle" size={22} color={COLORS.accent} />
+            <Ionicons name="checkmark-circle" size={22} color={COLORS.accentAlt} />
           </View>
         )}
 
-        <LinearGradient
-          colors={role.gradient}
-          style={styles.iconGradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <Ionicons name={role.icon} size={28} color="#fff" />
-        </LinearGradient>
+        <Animated.View style={{ transform: [{ translateY: floatY }] }}>
+          <LinearGradient
+            colors={COLORS[role.gradientKey] || COLORS.gradientPrimary}
+            style={styles.iconGradient}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+          >
+            <Ionicons name={role.icon} size={28} color="#fff" />
+          </LinearGradient>
+        </Animated.View>
 
         <Text style={styles.roleTitle}>{role.title}</Text>
         <Text style={styles.roleSubtitle}>{role.subtitle}</Text>
@@ -111,6 +123,9 @@ const RoleCard = ({ role, selected, onSelect, index }) => {
 };
 
 const RoleSelectionScreen = ({ navigation }) => {
+  const { colors: COLORS, SHADOWS } = useTheme();
+  const styles = React.useMemo(() => makeStyles(COLORS, SHADOWS), [COLORS, SHADOWS]);
+  
   const [selectedRole, setSelectedRole] = useState(null);
 
   const handleContinue = () => {
@@ -144,6 +159,9 @@ const RoleSelectionScreen = ({ navigation }) => {
             index={index}
             selected={selectedRole === role.id}
             onSelect={setSelectedRole}
+            styles={styles}
+            COLORS={COLORS}
+            SHADOWS={SHADOWS}
           />
         ))}
 
@@ -170,7 +188,7 @@ const RoleSelectionScreen = ({ navigation }) => {
   );
 };
 
-const styles = StyleSheet.create({
+const makeStyles = (COLORS, SHADOWS) => StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   header: {
     flexDirection: 'row',
@@ -216,7 +234,7 @@ const styles = StyleSheet.create({
   },
   cardSelected: {
     borderColor: COLORS.primary,
-    backgroundColor: '#F0F4FF',
+    backgroundColor: COLORS.surfaceHighlight || (COLORS.primary + '10'),
   },
   selectedCheck: {
     position: 'absolute',
@@ -266,7 +284,7 @@ const styles = StyleSheet.create({
   },
   loginBold: {
     fontFamily: FONTS.bold,
-    color: COLORS.primary,
+    color: COLORS.primaryText,
   },
 });
 
