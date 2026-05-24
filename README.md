@@ -74,13 +74,6 @@ Use the Expo Go app on your physical device to scan the provided QR code and lau
 - **Dashboard Analytics:** High-level metrics on active jobs and applicant engagement.
 - **Candidate Outreach:** Initiate direct conversations with promising applicants.
 
-## Project Documentation
-
-Detailed project documentation and academic deliverables can be found in the `/docs` directory:
-- `user_research_plan.md`: Details our user research methodology and interview findings.
-- `workflow_map.md`: Contains system diagrams, state management logic, and user flow documentation.
-- `architecture_description.md`: Provides an in-depth look at our technical design decisions and deployment strategy.
-
 ## Technologies Used
 - **Frontend:** React Native, Expo, React Navigation
 - **Backend:** Node.js, Express.js
