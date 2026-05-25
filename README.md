@@ -1,119 +1,171 @@
-# Nileworks Group Project
+<div align="center">
 
-## Team Members
-1. Yonas Woldeyohanis
-2. [Member 2 Name]
-3. [Member 3 Name]
-4. [Member 4 Name]
+<img src="https://img.shields.io/badge/Platform-React%20Native%20%7C%20Expo-blue?style=for-the-badge&logo=react" />
+<img src="https://img.shields.io/badge/Backend-Node.js%20%7C%20Express-green?style=for-the-badge&logo=node.js" />
+<img src="https://img.shields.io/badge/Database-MongoDB%20Atlas-brightgreen?style=for-the-badge&logo=mongodb" />
+<img src="https://img.shields.io/badge/Realtime-Socket.io-black?style=for-the-badge&logo=socket.io" />
+<img src="https://img.shields.io/badge/Auth-JWT-orange?style=for-the-badge&logo=jsonwebtokens" />
+<img src="https://img.shields.io/badge/License-MIT-lightgrey?style=for-the-badge" />
 
-NileWorks is a mobile platform built to connect Ethiopian university students with internship, part-time, and entry-level job opportunities. The application provides a centralized space where students can discover opportunities, manage applications, and communicate directly with employers in real time.
+<br/><br/>
 
-The project was developed with a focus on accessibility, local relevance, and practical career support for students entering the workforce.
+# 🌊 NileWorks
 
----
+### *Bridging Ethiopian University Students with Real Opportunities*
 
-# UI/UX Screenshots
+NileWorks is a full-stack mobile platform that connects Ethiopian university students with internships, part-time, and entry-level jobs — while giving employers the tools to post listings, review applicants, and hire efficiently.
 
-*(Place your screenshots in the `assets/screenshots` folder and update the filenames below if needed)*
+[Features](#-features) · [Screenshots](#-screenshots) · [Tech Stack](#-tech-stack) · [Setup](#-local-development-setup) · [API Overview](#-api--backend-highlights) · [Team](#-team)
 
-<p align="center">
-  <img src="assets/screenshots/screen1.png" width="220" alt="Home Screen" />
-  <img src="assets/screenshots/screen2.png" width="220" alt="Job Details" />
-  <img src="assets/screenshots/screen3.png" width="220" alt="Chat Interface" />
-</p>
+</div>
 
 ---
 
-# Features
+## 📖 About The Project
 
-## Student Features
-- Browse internship, remote, part-time, and full-time opportunities
-- Search and filter jobs by category, type, and requirements
-- Track application progress through a visual dashboard
-- Build and manage professional profiles
-- Upload CVs and showcase skills
-- Chat directly with recruiters in real time
+The Ethiopian job market presents unique challenges for university students: listings are scattered, informal, and often inaccessible. NileWorks centralizes opportunities with a localized, mobile-first experience — built by ASTU students, for Ethiopian students.
 
-## Employer Features
-- Create and manage job postings
-- Review applications and candidate profiles
-- Download submitted CVs
-- Update applicant statuses
-- Communicate with applicants instantly
-- Monitor recruitment activity through dashboard insights
+**Two user roles, one platform:**
+
+| 🎓 Students | 🏢 Employers |
+|---|---|
+| Browse 100s of curated listings | Post jobs with detailed requirements |
+| Track every application in one place | Review applicants & download CVs |
+| Get matched to relevant opportunities | Manage your hiring pipeline |
+| Message employers directly | Chat with candidates in real time |
+| Build a profile with CV upload | Monitor recruitment via dashboard |
 
 ---
 
-# System Architecture
+## 📸 Screenshots
 
-NileWorks follows a modern client-server architecture designed for scalability and real-time interaction.
+### Onboarding & Authentication
 
-## Frontend
-- React Native
-- Expo
-- React Navigation
+> Role selection → Sign in / Register → Two-step student or employer account creation
 
-## Backend
-- Node.js
-- Express.js
-
-## Database
-- MongoDB Atlas
-- Mongoose ODM
-
-## Real-Time Communication
-- Socket.io
-
-## Media & File Storage
-- Cloudinary
-- Multer
-
-## Authentication
-- JWT Access & Refresh Token System
+![Auth Flow](screenshots/banner_auth.jpg)
 
 ---
 
-# Project Structure
+### Student Experience
 
-```bash
+> Personalized job discovery → Detailed listings → Profile & CV management
+
+![Student Flow](screenshots/banner_student.jpg)
+
+---
+
+### Employer Dashboard
+
+> Role selection → Company registration → Dashboard with active listings & applicant stats
+
+![Employer Flow](screenshots/banner_employer.jpg)
+
+---
+
+### Job Posting
+
+> Full job form with type, location, salary, skills → Live confirmation
+
+![Job Posting](screenshots/banner_posting.jpg)
+
+---
+
+## ✨ Features
+
+### For Students
+- 🔍 **Discover** — Browse internships, part-time, full-time, and remote listings
+- 🎯 **Filter & Search** — By job type, location, skills, and salary
+- 📊 **Application Tracker** — Visual pipeline showing every application's status
+- 👤 **Profile Builder** — Showcase your university, department, year, skills, and links
+- 📄 **CV Upload** — PDF upload via Cloudinary; downloadable by employers
+- 💬 **Real-Time Messaging** — Chat directly with recruiters via Socket.io
+
+### For Employers
+- 📝 **Post Jobs** — Title, description, type, location, salary, required skills, deadlines
+- 👥 **Applicant Management** — Review profiles, shortlist candidates, track pipeline
+- 📥 **CV Downloads** — Access student CVs directly from the dashboard
+- 📊 **Dashboard Analytics** — Active listings count, total applicants, shortlisted stats
+- 💬 **Instant Messaging** — Communicate with applicants without leaving the platform
+
+---
+
+## 🛠 Tech Stack
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                    NILEWORKS STACK                       │
+├───────────────────────┬─────────────────────────────────┤
+│  Mobile Frontend      │  React Native + Expo             │
+│  Navigation           │  React Navigation                │
+│  Backend API          │  Node.js + Express.js            │
+│  Database             │  MongoDB Atlas + Mongoose        │
+│  Real-Time            │  Socket.io                       │
+│  Auth                 │  JWT (Access + Refresh Tokens)   │
+│  Media Storage        │  Cloudinary + Multer             │
+│  Testing              │  Jest                            │
+└───────────────────────┴─────────────────────────────────┘
+```
+
+---
+
+## 📁 Project Structure
+
+```
 NileWorks/
+├── backend/
+│   ├── controllers/        # Route logic (auth, jobs, users, messages)
+│   ├── models/             # Mongoose schemas
+│   ├── routes/             # API route definitions
+│   ├── middleware/         # Auth guards, file handling
+│   ├── socket/             # Socket.io event handlers
+│   └── server.js           # App entry point
 │
-├── backend/        # Express API and server-side logic
-├── frontend/       # React Native mobile application
+├── frontend/
+│   ├── screens/            # App screens (Student & Employer flows)
+│   ├── components/         # Reusable UI components
+│   ├── navigation/         # Stack & tab navigators
+│   ├── constants/          # API endpoints, theme colors
+│   └── App.js              # Root component
+│
+├── tests/                  # Jest test suites
+├── .env.example            # Environment variable template
 └── README.md
 ```
 
 ---
 
-# Local Development Setup
+## ⚙️ Local Development Setup
 
-## Prerequisites
+### Prerequisites
 
-Make sure the following tools are installed:
+Make sure you have these installed:
 
-- Node.js (v18 or later)
+- [Node.js](https://nodejs.org/) v18 or later
 - npm
-- Expo Go mobile app
-- MongoDB Atlas account
-- Cloudinary account
+- [Expo Go](https://expo.dev/client) on your mobile device
+- [MongoDB Atlas](https://www.mongodb.com/atlas) account
+- [Cloudinary](https://cloudinary.com/) account
 
 ---
 
-# Backend Setup
+### 1. Clone the Repository
 
-Navigate to the backend directory:
+```bash
+git clone https://github.com/yonas-woldeyohanis/Nileworks-group-project.git
+cd Nileworks-group-project
+```
+
+---
+
+### 2. Backend Setup
 
 ```bash
 cd backend
-```
-
-Install dependencies:
-
-```bash
 npm install
 ```
 
-Create a `.env` file inside the backend directory and configure the following variables:
+Create a `.env` file inside `backend/`:
 
 ```env
 MONGO_URI=your_mongodb_connection_string
@@ -125,104 +177,155 @@ CLOUDINARY_API_SECRET=your_api_secret
 JWT_ACCESS_SECRET=your_access_secret
 JWT_REFRESH_SECRET=your_refresh_secret
 
-EMAIL_USER=your_email
+EMAIL_USER=your_email_address
 EMAIL_PASS=your_email_password
 ```
 
-Start the backend server:
+Start the dev server:
 
 ```bash
 npm run dev
 ```
 
-The API will run on:
-
-```bash
-http://localhost:5000
-```
+> API runs at `http://localhost:5000`
 
 ---
 
-# Frontend Setup
+### 3. Frontend Setup
 
-Open a new terminal and navigate to the frontend directory:
+Open a new terminal:
 
 ```bash
 cd frontend
-```
-
-Install dependencies:
-
-```bash
 npm install
 ```
 
-Update the API base URL in:
+Update your API base URL in `frontend/constants/endpoints.js`:
 
-```bash
-frontend/constants/endpoints.js
-```
-
-Example:
-
-```javascript
+```js
 export const BASE_URL = 'http://192.168.x.x:5000/api/v1';
+// Replace with your machine's local IPv4 address
 ```
 
-> Replace `192.168.x.x` with your machine’s local IPv4 address.
-
-Start the Expo development server:
+Launch the Expo server:
 
 ```bash
 npx expo start
 ```
 
-Scan the QR code using the Expo Go app to launch the application on your mobile device.
+Scan the QR code using **Expo Go** on your phone.
 
-> Ensure your phone and development machine are connected to the same Wi-Fi network.
-
----
-
-# Core Functionalities
-
-## Job Discovery
-Students can explore opportunities tailored to their interests, skills, and availability.
-
-## Real-Time Messaging
-Integrated chat functionality enables direct communication between students and employers.
-
-## Application Management
-Students can track application progress, while employers can manage candidate workflows efficiently.
-
-## Profile & CV Management
-Users can upload CVs, update professional information, and maintain a complete profile.
+> ⚠️ Your phone and development machine must be on the **same Wi-Fi network**.
 
 ---
 
-# API & Backend Highlights
+### 4. Run Tests
 
-- RESTful API architecture
-- Secure JWT authentication
-- Token refresh mechanism
-- Cloud-based media storage
-- Real-time event handling with Socket.io
-- Modular and scalable backend structure
+```bash
+npm test
+```
 
 ---
 
-# Future Improvements
+## 🔌 API & Backend Highlights
 
-- Push notifications
-- AI-powered job recommendations
-- In-app interview scheduling
-- Admin moderation dashboard
-- Company verification system
-- Multi-language support
+| Area | Details |
+|---|---|
+| Architecture | RESTful API with modular controllers and routes |
+| Authentication | JWT with access + refresh token rotation |
+| Real-Time | Socket.io for bidirectional chat events |
+| File Handling | Multer parses uploads; Cloudinary stores them |
+| Media | Student CVs (PDF) and employer logos |
+| Security | Route guards via middleware on all protected endpoints |
+
+**Core API Endpoints (prefix `/api/v1`):**
+
+```
+POST   /auth/register/student     Register a student account
+POST   /auth/register/employer    Register an employer account
+POST   /auth/login                Sign in (returns JWT tokens)
+POST   /auth/refresh              Refresh access token
+
+GET    /jobs                      List all active job postings
+POST   /jobs                      Create a new job listing (employer)
+GET    /jobs/:id                  Get job details
+DELETE /jobs/:id                  Delete a listing (employer)
+
+GET    /applications/me           Get student's applications
+POST   /applications/:jobId       Apply to a job
+PATCH  /applications/:id          Update application status (employer)
+
+GET    /messages/:conversationId  Fetch chat messages
+POST   /messages                  Send a message
+```
 
 ---
 
-# Development Goal
+## 🗺 User Flow Overview
 
-NileWorks was created as a capstone project focused on solving real employment accessibility challenges for university students in Ethiopia by providing a modern and localized recruitment platform.
+```
+┌─────────── STUDENT ────────────────────────────────────┐
+│                                                         │
+│  Welcome Screen → Select "Student" → Register (2 steps)│
+│      ↓                                                  │
+│  Discover Feed → Browse / Filter Jobs                   │
+│      ↓                                                  │
+│  Job Detail → Apply → Track in Tracker Tab              │
+│      ↓                                                  │
+│  Message Employer ↔ Real-Time Chat                      │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+
+┌─────────── EMPLOYER ───────────────────────────────────┐
+│                                                         │
+│  Welcome Screen → Select "Employer" → Register Company  │
+│      ↓                                                  │
+│  Dashboard → Post New Job Listing                       │
+│      ↓                                                  │
+│  Applicants Tab → Review Profiles → Shortlist           │
+│      ↓                                                  │
+│  Message Applicant ↔ Real-Time Chat                     │
+│                                                         │
+└─────────────────────────────────────────────────────────┘
+```
 
 ---
+
+## 🚀 Roadmap
+
+- [ ] Push notifications (Expo Notifications)
+- [ ] AI-powered job recommendations based on profile
+- [ ] In-app interview scheduling
+- [ ] Admin moderation dashboard
+- [ ] Company verification badge system
+- [ ] Amharic / multi-language support
+- [ ] Analytics for employers (views, conversion rates)
+
+---
+
+## 👥 Team
+
+This project was developed as a group capstone at **Adama Science and Technology University (ASTU)**.
+
+| Name | Role |
+|---|---|
+| Yonas Woldeyohanis | Full-Stack Developer |
+| Member 2 | *(update with name and role)* |
+| Member 3 | *(update with name and role)* |
+| Member 4 | *(update with name and role)* |
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for details.
+
+---
+
+<div align="center">
+
+Built with ❤️ in Ethiopia 🇪🇹
+
+**[⬆ Back to top](#-nileworks)**
+
+</div>
