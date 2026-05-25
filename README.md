@@ -310,9 +310,10 @@ This project was developed as a group capstone at **Adama Science and Technology
 | Name | Role |
 |---|---|
 | Yonas Woldeyohanis | Full-Stack Developer |
-| Member 2 | *(update with name and role)* |
-| Member 3 | *(update with name and role)* |
-| Member 4 | *(update with name and role)* |
+| Member 2 | Gadisa Solomon| 
+| Member 3 | Ziyad Ayub |
+| Member 4 | Matiwos Teferi |
+| Member 5 | Rihobot Girma |
 
 ---
 
