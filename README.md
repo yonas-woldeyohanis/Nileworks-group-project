@@ -1,8 +1,26 @@
 # Nileworks Group Project
 
+## Team Members
+1. Yonas Woldeyohanis
+2. [Member 2 Name]
+3. [Member 3 Name]
+4. [Member 4 Name]
+
 NileWorks is a mobile platform built to connect Ethiopian university students with internship, part-time, and entry-level job opportunities. The application provides a centralized space where students can discover opportunities, manage applications, and communicate directly with employers in real time.
 
 The project was developed with a focus on accessibility, local relevance, and practical career support for students entering the workforce.
+
+---
+
+# UI/UX Screenshots
+
+*(Place your screenshots in the `assets/screenshots` folder and update the filenames below if needed)*
+
+<p align="center">
+  <img src="assets/screenshots/screen1.png" width="220" alt="Home Screen" />
+  <img src="assets/screenshots/screen2.png" width="220" alt="Job Details" />
+  <img src="assets/screenshots/screen3.png" width="220" alt="Chat Interface" />
+</p>
 
 ---
 
