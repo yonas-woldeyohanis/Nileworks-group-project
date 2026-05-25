@@ -1,106 +1,210 @@
 # Nileworks Group Project
 
-A collaborative development project by the Nileworks team.
+NileWorks is a mobile platform built to connect Ethiopian university students with internship, part-time, and entry-level job opportunities. The application provides a centralized space where students can discover opportunities, manage applications, and communicate directly with employers in real time.
 
-## Overview
+The project was developed with a focus on accessibility, local relevance, and practical career support for students entering the workforce.
 
-This project is designed to demonstrate modern web development practices with Node.js and Express.
+---
 
-## Features
+# Features
 
-- ✨ RESTful API endpoints
-- 🔧 Modular code structure
-- 📝 Comprehensive documentation
-- ✅ Error handling and validation
-- 🚀 Ready for deployment
+## Student Features
+- Browse internship, remote, part-time, and full-time opportunities
+- Search and filter jobs by category, type, and requirements
+- Track application progress through a visual dashboard
+- Build and manage professional profiles
+- Upload CVs and showcase skills
+- Chat directly with recruiters in real time
 
-## Getting Started
+## Employer Features
+- Create and manage job postings
+- Review applications and candidate profiles
+- Download submitted CVs
+- Update applicant statuses
+- Communicate with applicants instantly
+- Monitor recruitment activity through dashboard insights
 
-### Prerequisites
+---
 
-- Node.js (v14.0.0 or higher)
-- npm or yarn
+# System Architecture
 
-### Installation
+NileWorks follows a modern client-server architecture designed for scalability and real-time interaction.
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yonas-woldeyohanis/Nileworks-group-project.git
-   cd Nileworks-group-project
-   ```
+## Frontend
+- React Native
+- Expo
+- React Navigation
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+## Backend
+- Node.js
+- Express.js
 
-3. Create a `.env` file based on `.env.example`:
-   ```bash
-   cp .env.example .env
-   ```
+## Database
+- MongoDB Atlas
+- Mongoose ODM
 
-4. Start the server:
-   ```bash
-   npm start
-   ```
+## Real-Time Communication
+- Socket.io
 
-   For development with auto-reload:
-   ```bash
-   npm run dev
-   ```
+## Media & File Storage
+- Cloudinary
+- Multer
 
-## API Endpoints
+## Authentication
+- JWT Access & Refresh Token System
 
-### GET /
-Returns a welcome message.
+---
 
-### GET /api/status
-Returns the current server status and timestamp.
-
-## Project Structure
-
-```
-Nileworks-group-project/
-├── src/
-│   ├── index.js          # Main application entry point
-│   ├── routes/           # API route handlers
-│   ├── controllers/      # Business logic
-│   └── middleware/       # Custom middleware
-├── tests/                # Test files
-├── public/               # Static files
-├── .env.example          # Environment variables template
-├── .gitignore            # Git ignore rules
-├── package.json          # Project dependencies
-└── README.md             # This file
-```
-
-## Testing
-
-Run tests with:
+# Project Structure
 
 ```bash
-npm test
+NileWorks/
+│
+├── backend/        # Express API and server-side logic
+├── frontend/       # React Native mobile application
+└── README.md
 ```
 
-## Linting
+---
 
-Check code quality:
+# Local Development Setup
+
+## Prerequisites
+
+Make sure the following tools are installed:
+
+- Node.js (v18 or later)
+- npm
+- Expo Go mobile app
+- MongoDB Atlas account
+- Cloudinary account
+
+---
+
+# Backend Setup
+
+Navigate to the backend directory:
 
 ```bash
-npm run lint
+cd backend
 ```
 
-## Contributing
+Install dependencies:
 
-1. Create a new branch: `git checkout -b feature/your-feature`
-2. Make your changes and commit: `git commit -m 'Add new feature'`
-3. Push to the branch: `git push origin feature/your-feature`
-4. Open a Pull Request
+```bash
+npm install
+```
 
-## License
+Create a `.env` file inside the backend directory and configure the following variables:
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+```env
+MONGO_URI=your_mongodb_connection_string
 
-## Contact
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 
-For questions or support, please reach out to the Nileworks team.
+JWT_ACCESS_SECRET=your_access_secret
+JWT_REFRESH_SECRET=your_refresh_secret
+
+EMAIL_USER=your_email
+EMAIL_PASS=your_email_password
+```
+
+Start the backend server:
+
+```bash
+npm run dev
+```
+
+The API will run on:
+
+```bash
+http://localhost:5000
+```
+
+---
+
+# Frontend Setup
+
+Open a new terminal and navigate to the frontend directory:
+
+```bash
+cd frontend
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+Update the API base URL in:
+
+```bash
+frontend/constants/endpoints.js
+```
+
+Example:
+
+```javascript
+export const BASE_URL = 'http://192.168.x.x:5000/api/v1';
+```
+
+> Replace `192.168.x.x` with your machine’s local IPv4 address.
+
+Start the Expo development server:
+
+```bash
+npx expo start
+```
+
+Scan the QR code using the Expo Go app to launch the application on your mobile device.
+
+> Ensure your phone and development machine are connected to the same Wi-Fi network.
+
+---
+
+# Core Functionalities
+
+## Job Discovery
+Students can explore opportunities tailored to their interests, skills, and availability.
+
+## Real-Time Messaging
+Integrated chat functionality enables direct communication between students and employers.
+
+## Application Management
+Students can track application progress, while employers can manage candidate workflows efficiently.
+
+## Profile & CV Management
+Users can upload CVs, update professional information, and maintain a complete profile.
+
+---
+
+# API & Backend Highlights
+
+- RESTful API architecture
+- Secure JWT authentication
+- Token refresh mechanism
+- Cloud-based media storage
+- Real-time event handling with Socket.io
+- Modular and scalable backend structure
+
+---
+
+# Future Improvements
+
+- Push notifications
+- AI-powered job recommendations
+- In-app interview scheduling
+- Admin moderation dashboard
+- Company verification system
+- Multi-language support
+
+---
+
+# Development Goal
+
+NileWorks was created as a capstone project focused on solving real employment accessibility challenges for university students in Ethiopia by providing a modern and localized recruitment platform.
+
+---
