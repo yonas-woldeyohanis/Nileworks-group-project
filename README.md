@@ -13,7 +13,7 @@
 
 ### *Bridging Ethiopian University Students with Real Opportunities*
 
-NileWorks is a full-stack mobile platform that connects Ethiopian university students with internships, part-time, and entry-level jobs — while giving employers the tools to post listings, review applicants, and hire efficiently.
+NileWorks is a full-stack mobile platform that connects Ethiopian university students with internships, part-time, and entry-level jobs — while giving employers the tools to post listings, review applicants, and manage their hiring pipeline in real time.
 
 [Features](#-features) · [Screenshots](#-screenshots) · [Tech Stack](#-tech-stack) · [Setup](#-local-development-setup) · [API Overview](#-api--backend-highlights) · [Team](#-team)
 
@@ -23,7 +23,7 @@ NileWorks is a full-stack mobile platform that connects Ethiopian university stu
 
 ## 📖 About The Project
 
-The Ethiopian job market presents unique challenges for university students: listings are scattered, informal, and often inaccessible. NileWorks centralizes opportunities with a localized, mobile-first experience — built by ASTU students, for Ethiopian students.
+The Ethiopian job market presents unique challenges for university students: listings are scattered, informal, and often inaccessible. NileWorks centralizes opportunities with a localized, mobile-first platform for job discovery and employer outreach.
 
 **Two user roles, one platform:**
 
@@ -310,9 +310,10 @@ This project was developed as a group capstone at **Adama Science and Technology
 | Name | Role |
 |---|---|
 | Yonas Woldeyohanis | Full-Stack Developer |
-| Member 2 | *(update with name and role)* |
-| Member 3 | *(update with name and role)* |
-| Member 4 | *(update with name and role)* |
+| Member 2 | Gadisa Solomon| - |
+| Member 3 | Ziyad Ayub | - |
+| Member 4 | Matiwos Teferi | - |
+| Member 5 | Rihobot Girma | - |
 
 ---
 
